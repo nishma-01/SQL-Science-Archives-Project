@@ -1,0 +1,311 @@
+
+/******************************** CREATE TABLES SCRIPT **********************************/
+
+
+/* This script has been created and used on PostgreSQL and PGAdmin. */
+
+
+/***************************************** TABLE 1 *****************************************/
+
+
+CREATE TABLE publication_type (
+	publication_type_id			SERIAL,
+	publication_type 			VARCHAR(50) NOT NULL UNIQUE,
+	PRIMARY KEY (publication_type_id)
+) ;
+
+
+/***************************************** TABLE 2 *****************************************/
+
+
+CREATE TABLE publication (
+	publication_id 				SERIAL,
+	publication_type_id			INT NOT NULL,
+	publication_title 			VARCHAR(100) NOT NULL,
+	abstract				VARCHAR(4000) DEFAULT 'undefined',
+	publication_year			INT NOT NULL,
+	primary_source_hyperlink		VARCHAR(100) DEFAULT 'undefined',
+	PRIMARY KEY (publication_id),
+	FOREIGN KEY (publication_type_id) REFERENCES publication_type (publication_type_id),
+	CONSTRAINT check_year
+		CHECK (publication_year > 1950)
+) ;
+
+
+/***************************************** TABLE 3 *****************************************/
+
+
+CREATE TABLE editor (
+	editor_id				SERIAL,
+	first_name		 		VARCHAR(50) NOT NULL,
+	last_name				VARCHAR(50) DEFAULT 'undefined',
+	PRIMARY KEY (editor_id)
+) ;
+
+
+/***************************************** TABLE 4 *****************************************/
+
+
+CREATE TABLE thesis_type (
+	thesis_type_id				SERIAL,
+	thesis_type 				VARCHAR(50) NOT NULL UNIQUE,
+	PRIMARY KEY (thesis_type_id)
+) ;
+
+
+/***************************************** TABLE 5 *****************************************/
+
+
+CREATE TABLE journal_article_details (
+	journal_article_id			SERIAL,
+	publication_id 				INT NOT NULL UNIQUE,
+	journal_title		 		VARCHAR(100) NOT NULL,
+	volume_number				INT,
+	issue_number				INT,
+	page_number				VARCHAR(14),
+	publisher				VARCHAR(100) NOT NULL,
+	PRIMARY KEY (journal_article_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id)
+) ;
+
+
+/***************************************** TABLE 6 *****************************************/
+
+
+CREATE TABLE conference_proceeding_paper_details (
+	conf_proc_paper_id			SERIAL,
+	publication_id 				INT NOT NULL UNIQUE,
+	conference_title		 	VARCHAR(100) NOT NULL,
+	place_of_publication			VARCHAR(100),
+	publisher				VARCHAR(100) NOT NULL,
+	page_number				VARCHAR(14),
+	PRIMARY KEY (conf_proc_paper_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id)
+) ;
+
+
+/***************************************** TABLE 7 *****************************************/
+
+
+CREATE TABLE book_details (
+	book_id					SERIAL,
+	publication_id 				INT NOT NULL UNIQUE,
+	series_title		 		VARCHAR(100) NOT NULL,
+	series_number				INT,
+	edition					VARCHAR(25),
+	place_of_publication			VARCHAR(100),
+	publisher				VARCHAR(100) NOT NULL,
+	PRIMARY KEY (book_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id)
+) ;
+
+
+/***************************************** TABLE 8 *****************************************/
+
+
+CREATE TABLE thesis_details (
+	thesis_id				SERIAL,
+	publication_id 				INT NOT NULL UNIQUE,
+	thesis_type_id				INT NOT NULL,
+	academic_institution		 	VARCHAR(100) DEFAULT 'undefined',
+	PRIMARY KEY (thesis_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id),
+	FOREIGN KEY (thesis_type_id) REFERENCES thesis_type (thesis_type_id)
+) ;
+
+
+/***************************************** TABLE 9 *****************************************/
+
+
+CREATE TABLE publication_editors (
+	publication_id				INT NOT NULL,
+	editor_id 				INT NOT NULL,
+	PRIMARY KEY (publication_id, editor_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id),
+	FOREIGN KEY (editor_id) REFERENCES editor (editor_id)
+) ;
+
+CREATE UNIQUE INDEX pub_editors_index
+ ON publication_editors (publication_id, editor_id);
+
+
+/***************************************** TABLE 10 *****************************************/
+
+
+CREATE TABLE subjects (
+	subject_id				SERIAL,
+	subject					VARCHAR(50) NOT NULL UNIQUE,
+	PRIMARY KEY (subject_id)
+) ;
+
+
+/***************************************** TABLE 11 *****************************************/
+
+
+CREATE TABLE publication_subject_areas (
+	publication_id				INT NOT NULL,
+	subject_id				INT NOT NULL,
+	PRIMARY KEY (publication_id, subject_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id) ON DELETE CASCADE,
+	FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
+) ;
+
+CREATE UNIQUE INDEX pub_subjects_index
+ ON publication_subject_areas (publication_id, subject_id);
+
+
+/***************************************** TABLE 12 *****************************************/
+
+
+CREATE TABLE user_capacity (
+	capacity_id				SERIAL,
+	user_capacity				VARCHAR(50) NOT NULL UNIQUE,
+	PRIMARY KEY (capacity_id)
+) ;
+
+
+/***************************************** TABLE 13 *****************************************/
+
+
+CREATE TABLE system_user (
+	user_id					SERIAL,
+	capacity_id 				INT NOT NULL,
+	first_name		 		VARCHAR(50) NOT NULL,
+	last_name				VARCHAR(50) NOT NULL,
+	email_address				VARCHAR(100) NOT NULL UNIQUE,
+	phone_number				VARCHAR(18) NOT NULL,
+	contact_preference			VARCHAR(8) NOT NULL,
+	PRIMARY KEY (user_id),
+	FOREIGN KEY (capacity_id) REFERENCES user_capacity (capacity_id),
+	CONSTRAINT check_email
+		CHECK (email_address LIKE '%@%.%')
+) ;
+
+
+/***************************************** TABLE 14 *****************************************/
+
+
+CREATE TABLE user_subject_preference (
+	user_id					INT NOT NULL,
+	subject_id				INT NOT NULL,
+	PRIMARY KEY (user_id, subject_id),
+	FOREIGN KEY (user_id) REFERENCES system_user (user_id),
+	FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
+) ;
+
+CREATE UNIQUE INDEX user_subjects_index
+ ON user_subject_preference (user_id, subject_id);
+
+
+/***************************************** TABLE 15 *****************************************/
+
+
+CREATE TABLE author (
+	author_id				SERIAL,
+	user_id					INT NOT NULL UNIQUE,
+	PRIMARY KEY (author_id),
+	FOREIGN KEY (user_id) REFERENCES system_user (user_id)
+) ;
+
+
+/***************************************** TABLE 16 *****************************************/
+
+
+CREATE TABLE publication_coauthors (
+	publication_id				INT NOT NULL,
+	author_id				INT NOT NULL,
+	PRIMARY KEY (publication_id, author_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id),
+	FOREIGN KEY (author_id) REFERENCES author (author_id)
+) ;
+
+CREATE UNIQUE INDEX pub_coauthor_index
+ ON publication_coauthors (publication_id, author_id);
+
+
+/***************************************** TABLE 17 *****************************************/
+
+
+CREATE TABLE author_contribution_score (
+	contribution_score_id			SERIAL,
+	author_id				INT NOT NULL,
+	subject_id				INT NOT NULL,
+	contribution_score			INT NOT NULL,
+	PRIMARY KEY (contribution_score_id),
+	FOREIGN KEY (author_id) REFERENCES author (author_id),
+	FOREIGN KEY (subject_id) REFERENCES subjects (subject_id),
+	CONSTRAINT check_cont_score
+		CHECK (contribution_score <= 100 and contribution_score >= 1)
+) ;
+
+CREATE UNIQUE INDEX author_contrscore_index
+ ON author_contribution_score (author_id, subject_id);
+
+
+/***************************************** TABLE 18 *****************************************/
+
+
+CREATE TABLE item_read_type (
+	read_type_id				SERIAL,
+	read_type				VARCHAR(50) NOT NULL UNIQUE,
+	PRIMARY KEY (read_type_id)
+) ;
+
+
+/***************************************** TABLE 19 *****************************************/
+
+
+CREATE TABLE user_library (
+	library_id				SERIAL,
+	user_id					INT NOT NULL,
+	publication_id				INT NOT NULL,
+	read_type_id				INT NOT NULL,
+	PRIMARY KEY (library_id),
+	FOREIGN KEY (user_id) REFERENCES system_user (user_id),
+	FOREIGN KEY (publication_id) REFERENCES publication (publication_id),
+	FOREIGN KEY (read_type_id) REFERENCES item_read_type (read_type_id)
+) ;
+
+CREATE UNIQUE INDEX user_lib_index
+ ON user_library (user_id, publication_id);
+
+
+/***************************************** TABLE 20 *****************************************/
+
+
+CREATE TABLE user_reviews (
+	review_id				SERIAL,
+	library_id				INT NOT NULL UNIQUE,
+	review					VARCHAR(1000) NOT NULL,
+	review_score				INT NOT NULL,
+	review_date				DATE NOT NULL,
+	PRIMARY KEY (review_id),
+	FOREIGN KEY (library_id) REFERENCES user_library (library_id),
+	CONSTRAINT check_review_score
+		CHECK (review_score <= 100 and review_score >= 0)
+) ;
+
+
+/***************************************** TABLE 21 *****************************************/
+
+
+CREATE TABLE publication_links_visited (
+	hyperlink_id			SERIAL,
+	library_id			INT NOT NULL UNIQUE,
+	item_hyperlink			VARCHAR(1000) NOT NULL,
+	PRIMARY KEY (hyperlink_id),
+	FOREIGN KEY (library_id) REFERENCES user_library (library_id)
+) ;
+
+
+/********************************************************************************************/
+
+
+
+
+
+
+
+
+
+

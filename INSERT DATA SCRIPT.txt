@@ -1,0 +1,417 @@
+/******************************** INSERTING DATA SCRIPT **********************************/
+
+/* This script has been created and used on PostgreSQL and PGAdmin. */
+
+
+/***************************************** TABLE 1 *****************************************/
+
+
+INSERT INTO publication_type (publication_type)
+	VALUES	('journal article'),
+		('conference proceeding paper'),
+		('book'),
+		('thesis');
+
+
+/***************************************** TABLE 2 *****************************************/
+
+
+INSERT INTO publication 
+(publication_type_id, publication_title, abstract, publication_year, primary_source_hyperlink)
+VALUES 
+	('2', 'human genome project', 'this paper is about genes.', '1994', 'www.examplea.com'),
+	('1', 'human computer interaction changes in time', 'how has HCI changed in time?', '2001', 'www.exampleb.com'),
+	('4', 'agile and software development', 'software development uses agile in many ways.', '2020', 'www.examplec.com'),
+	('3', 'scrum practices in large IT SMEs', 'this book explores scrum, its practices and benefits.', '1989', 'www.exampled.com'),
+	('3', 'plants and the sun', 'learn photosynthesis in this ks3 book.', '2000', 'www.examplee.com'),
+	('4', 'the impact of galileo on astronomy', 'how did galileo increase understanding of the stars?', '1989', 'www.exampleb.com'),
+	('2', 'scrum vs XP: different approaches to software development', 'XP is an underrated agile practice, is it better in software development than scrum?', '1977', 'www.examplec.com');
+
+INSERT INTO publication (publication_type_id, publication_title, publication_year, primary_source_hyperlink)
+VALUES	('3','database design basics','1999', 'www.examplee.com'),
+	('2', 'biochemistry practices within gene expression', '1980', 'www.examplef.com');
+	
+INSERT INTO publication (publication_type_id, publication_title, publication_year)
+VALUES	('4','database queries and constraints','1999'),
+	('1', 'approaches to medical research', '2016'),
+	('1', 'maths utilisation in astronomy', '1994');
+
+
+/***************************************** TABLE 3 *****************************************/
+
+
+INSERT INTO editor (first_name, last_name)
+VALUES	('Kelly', 'Lydick'),
+	('Chris', 'Evans'),
+	('Heather', 'Pendley'),
+	('Chris', 'Porter'),
+	('Joanne', 'Mattingly'),
+	('D', 'Smith');
+
+
+/***************************************** TABLE 4 *****************************************/
+
+
+INSERT INTO thesis_type (thesis_type)
+VALUES	('PhD'),
+	('EngD'),
+	('MSc');
+
+
+/***************************************** TABLE 5 *****************************************/
+
+
+INSERT INTO journal_article_details 
+(publication_id, journal_title, volume_number, issue_number, page_number, publisher)
+VALUES	('2', 'human computer interaction', '23', '4', '45-53', 'academic press'),
+	('11', 'medical management', '66', '12', '887-901','begell house');
+		
+INSERT INTO journal_article_details 
+(publication_id, journal_title, page_number, publisher)
+VALUES	('12', 'advances in astronomy', '32-35', 'bentham science');
+
+
+/***************************************** TABLE 6 *****************************************/
+
+
+INSERT INTO conference_proceeding_paper_details 
+(publication_id, conference_title, place_of_publication, publisher, page_number)
+VALUES	('1', 'genetics today', 'new york', 'academic press', 66-72),
+	('7', 'agile approaches to software development', 'london', 'equinox publishing', '84-90'),
+	('9', 'biochemistry today', 'berlin', 'parser press', '19-33');
+
+
+/***************************************** TABLE 7 *****************************************/
+
+
+INSERT INTO book_details 
+(publication_id, series_title, series_number, edition, place_of_publication, publisher)
+VALUES	('4', 'scrum and business', '3', 'second', 'london', 'pearson'),
+	('5', 'KS4 biology', '2', 'fourth','sweden', 'cambridge publishing');
+		
+INSERT INTO book_details 
+(publication_id, series_title, publisher)
+VALUES	('8', 'databases for dummies', 'elsevier');
+
+
+/***************************************** TABLE 8 *****************************************/
+
+
+INSERT INTO thesis_details 
+(publication_id, thesis_type_id, academic_institution)
+VALUES	('3', '1', 'aston university');
+
+INSERT INTO thesis_details 
+(publication_id, thesis_type_id)
+VALUES	('6', '2'),
+	('10', '3');
+
+
+/***************************************** TABLE 9 *****************************************/
+
+
+INSERT INTO publication_editors 
+(publication_id, editor_id)
+VALUES	('1', '1'),
+	('1', '2'),
+	('1', '6'),
+	('4', '4'),
+	('5', '4'),
+	('5', '6'),
+	('7', '3'),
+	('8', '5'),
+	('9', '1'),
+	('9', '6');
+
+
+/***************************************** TABLE 10 *****************************************/
+
+
+INSERT INTO subjects 
+(subject)
+VALUES	('biology'),
+	('genetics'),
+	('photosynthesis'),
+	('biochemistry'),
+	('medicine'),
+	('astronomy'),
+	('galileo'),
+	('maths'),
+	('computer science'),
+	('databases'),
+	('software development'),
+	('human computer interaction'),
+	('user interface design'),
+	('agile'),
+	('scrum'),
+	('XP');
+
+
+/***************************************** TABLE 11 *****************************************/
+
+
+INSERT INTO publication_subject_areas 
+(publication_id, subject_id)
+VALUES	('1', '1'),
+	('1', '2'),
+	('2', '9'),
+	('2', '12'),
+	('2', '13'),
+	('3', '9'),
+	('3', '11'),
+	('3', '14'),
+	('4', '9'),
+	('4', '15'),
+	('5', '1'),
+	('5', '3'),
+	('6', '6'),
+	('6', '7'),
+	('7', '9'),
+	('7', '11'),
+	('7', '15'),
+	('7', '16'),
+	('8', '9'),
+	('8', '10'),
+	('9', '2'),
+	('9', '4'),
+	('10', '9'),
+	('10', '10'),
+	('11', '5'),
+	('12', '6'),
+	('12', '8');
+
+
+/***************************************** TABLE 12 *****************************************/
+
+
+INSERT INTO user_capacity 
+(user_capacity)
+VALUES	('reader'),
+	('author'),
+	('reader and author');
+
+
+/***************************************** TABLE 13 *****************************************/
+
+
+INSERT INTO system_user 
+(capacity_id, first_name, last_name, email_address, phone_number, contact_preference)
+VALUES	('1', 'ashton', 'kutcher', 'ashy@live.com', '01213452849', 'email'),
+	('1', 'mila', 'kunis', 'milomila@live.com', '01213452849', 'email'),
+	('1', 'justin', 'timberlake', 'jtrules@outlook.com', '07772888899', 'phone'),
+	('2', 'justin', 'bieber', 'biebs@jb.org', '01234567890', 'phone'),
+	('2', 'meg', 'ryan', 'megmeg@gmail.com', '20875638277', 'email'),
+	('2', 'jay', 'z', 'jay@blueprint.com', '19374638295', 'email'),
+	('3', 'beyonce', 'knowles', 'queenb@bhive.com', '88866633311', 'email'),
+	('3', 'naomi', 'cambell', 'nao@models.co.uk', '01219330567', 'email'),
+	('3', 'priyanka', 'chopra', 'pri33@gmail.com', '07971263022', 'phone');
+
+
+/***************************************** TABLE 14 *****************************************/
+
+
+INSERT INTO user_subject_preference 
+(user_id, subject_id)
+VALUES	('1', '3'),
+	('1', '5'),
+	('2', '6'),
+	('3', '7'),
+	('3', '8'),
+	('3', '9'),
+	('4', '1'),
+	('4', '14'),
+	('5', '12'),
+	('6', '2'),
+	('6', '5'),
+	('7', '4'),
+	('7', '10'),
+	('7', '11'),
+	('8', '13'),
+	('8', '15'),
+	('9', '14');
+
+
+/***************************************** TABLE 15 *****************************************/
+
+
+INSERT INTO author 
+(user_id)
+VALUES	('4'),
+	('5'),
+	('6'),
+	('7'),
+	('8'),
+	('9');
+
+
+/***************************************** TABLE 16 *****************************************/
+
+
+INSERT INTO publication_coauthors 
+(author_id, publication_id)
+VALUES	('1', '1'),
+	('1', '3'),
+	('1', '5'),
+	('2', '2'),
+	('3', '1'),
+	('3', '9'),
+	('3', '12'),
+	('3', '11'),
+	('4', '3'),
+	('4', '7'),
+	('4', '8'),
+	('5', '2'),
+	('5', '4'),
+	('5', '7'),
+	('6', '5'),
+	('6', '6'),
+	('6', '10');
+
+
+/***************************************** TABLE 17 *****************************************/
+
+
+INSERT INTO author_contribution_score 
+(author_id, subject_id, contribution_score)
+VALUES	('1', '1', '23'),
+	('1', '2', '11'),
+	('1', '9', '8'),
+	('1', '11', '20'),
+	('1', '14', '56'),
+	('1', '3', '77'),
+	('2', '9', '21'),
+	('2', '12', '38'),
+	('2', '13', '62'),
+	('3', '2', '5'),
+	('3', '4', '43'),
+	('3', '5', '27'),
+	('3', '6', '33'),
+	('3', '8', '64'),
+	('4', '9', '22'),
+	('4', '11', '75'),
+	('4', '14', '8'),
+	('4', '15', '26'),
+	('4', '16', '19'),
+	('4', '10', '48'),
+	('5', '9', '4'),
+	('5', '15', '76'),
+	('5', '11', '12'),
+	('5', '16', '40'),
+	('5', '12', '87'),
+	('5', '13', '9'),
+	('6', '1', '34'),
+	('6', '3', '55'),
+	('6', '6', '28'),
+	('6', '7', '14'),
+	('6', '9', '17'),
+	('6', '10', '29');
+
+
+/***************************************** TABLE 18 *****************************************/
+
+
+INSERT INTO item_read_type 
+(read_type)
+VALUES	('hyperlink'),
+	('review/score'),
+	('hyperlink and review/score');
+
+
+/***************************************** TABLE 19 *****************************************/
+
+
+INSERT INTO user_library 
+(user_id, publication_id, read_type_id)
+VALUES	('1', '5', '3'),
+	('1', '1', '2'),
+	('1', '10', '2'),
+	('1', '8', '2'),
+	('2', '12', '1'),
+	('2', '10', '3'),
+	('2', '4', '2'),
+	('3', '4', '1'),
+	('3', '3', '3'),
+	('3', '9', '2'),
+	('3', '10', '1'),
+	('4', '9', '1'),
+	('4', '2', '3'),
+	('4', '6', '3'),
+	('5', '7', '2'),
+	('5', '8', '2'),
+	('5', '5', '2'),
+	('5', '12', '1'),
+	('6', '5', '3'),
+	('6', '7', '1'),
+	('6', '3', '3'),
+	('6', '2', '3'),
+	('7', '6', '3'),
+	('7', '11', '1'),
+	('8', '12', '1'),
+	('8', '1', '2'),
+	('8', '5', '1'),
+	('9', '3', '1'),
+	('9', '1', '3'),
+	('9', '4', '2');
+		
+
+/***************************************** TABLE 20 *****************************************/
+
+
+INSERT INTO user_reviews 
+(library_id, review, review_score, review_date)
+VALUES	('1', 'Lovely paper, great info!', '91', '2021-02-05'),
+	('2', 'Awful paper, no info!', '9', '2020-07-19'),
+	('3', 'OK paper, interesting stats.', '42', '2018-12-20'),
+	('4', 'good diagrams and figures.', '65', '2018-01-03'),
+	('6', 'excellent and informative', '87', '2017-09-16'),
+	('7', 'good', '77', '2021-02-24'),
+	('9', 'bad', '12', '2019-03-14'),
+	('10', 'good', '68', '2018-05-19'),
+	('13', 'informative and useful', '80', '2020-07-11'),
+	('14', 'interesting but long', '55', '2021-06-30'),
+	('15', 'not enough detail', '42', '2021-09-29'),
+	('16', 'unhelpful for me but good topic', '50', '2020-02-22'),
+	('17', 'helped me lots', '98', '2015-03-10'),
+	('19', 'excellent', '99', '2016-04-05'),
+	('21', 'fine source', '81', '2020-05-15'),
+	('22', 'great', '86', '2018-06-18'),
+	('23', 'abismal', '1', '2018-02-18'),
+	('26', 'decent paper', '60', '2015-08-07'),
+	('29', 'good detail and pictures', '72', '2013-08-12'),
+	('30', 'not great', '36', '2019-10-05');
+
+
+
+/***************************************** TABLE 21 *****************************************/
+
+	
+INSERT INTO publication_links_visited 
+(library_id, item_hyperlink)
+VALUES	('1', 'www.sciencelinksdirect.com'),
+	('5', 'www.examplec.com'),
+	('6', 'www.sciencelinksagain.com'),
+	('8', 'www.examplea.com'),
+	('9', 'www.sciencelinksagain.com'),
+	('11', 'www.sciencelinksdirect.com'),
+	('12', 'www.exampled.com'),
+	('13', 'www.sciencelinksdirect.com'),
+	('14', 'www.sciencelinksone.com'),
+	('18', 'www.examplef.com'),
+	('19', 'www.exampleg.com'),
+	('20', 'www.sciencelinksdirect.com'),
+	('21', 'www.examplec.com'),
+	('22', 'www.sciencelinkstwo.com'),
+	('23', 'www.sciencelinksone.com'),
+	('24', 'www.exampleb.com'),
+	('25', 'www.sciencelinkstwo.com'),
+	('27', 'www.sciencelinksdirect.com'),
+	('28', 'www.sciencelinksagain.com'),
+	('29', 'www.sciencelinksone.com');
+
+
+/********************************************************************************************/
+
+
+
+
+
